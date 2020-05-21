@@ -20,7 +20,8 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 import RNSketchCanvas from '@terrylinla/react-native-sketch-canvas';
-import App from '../App'
+import App from '../App';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 
 export default class Draw extends React.Component{
@@ -61,9 +62,9 @@ export default class Draw extends React.Component{
       {this.state.page === 3 &&
       <View style={{flexDirection:'row'}}>
           <View>         
-            <TouchableOpacity>
-              <Button title="Torna" onPress={this.goToMenu}></Button>
-            </TouchableOpacity>
+              <TouchableOpacity onPress={this.goToMenu}>
+                <Icon style={{marginLeft:10, marginTop:10}} size={35} color='#22e96b' name="arrowleft" ></Icon>
+              </TouchableOpacity>
           </View>
 
           {this.state.bg === 1 &&

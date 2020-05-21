@@ -23,6 +23,7 @@ import {
 import App from '../App';
 import Accordion from 'react-native-collapsible/Accordion';
 import axios from 'axios';
+import Icon from 'react-native-vector-icons/AntDesign';
 /*
 const CONTENT =[
   {title: 'hola',
@@ -134,9 +135,9 @@ export default class Expage extends React.Component{
       <>
       {this.state.page === 1 &&
           <ScrollView>         
-            <TouchableOpacity>
-              <Button title="Torna" onPress={this.goToMenu}></Button>
-            </TouchableOpacity>
+              <TouchableOpacity onPress={this.goToMenu}>
+                <Icon style={{marginLeft:10, marginTop:10}} size={35} color='#22e96b' name="arrowleft" ></Icon>
+              </TouchableOpacity>
           
             <View style={styles.colapsible}>
               <Accordion

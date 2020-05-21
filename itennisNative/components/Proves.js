@@ -9,7 +9,6 @@ import {
   StatusBar,
   Image,
   TouchableOpacity,
-  Button,
   TextInput,
 } from 'react-native';
 const DeviceWidth = Dimensions.get('window').height;
@@ -23,6 +22,8 @@ import {
 import App from '../App'
 import StepIndicator from 'react-native-step-indicator';
 import NumericInput from 'react-native-numeric-input';
+import Button from 'apsl-react-native-button';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 const labels = ["Fase 1","Fase 2","Fase 3"];
 const customStyles = {
@@ -32,11 +33,11 @@ const customStyles = {
   currentStepStrokeWidth: 3,
   stepStrokeCurrentColor: '#22e96b',
   stepStrokeWidth: 3,
-  stepStrokeFinishedColor: '#22e96b',
+  stepStrokeFinishedColor: '#aaaaaa',
   stepStrokeUnFinishedColor: '#aaaaaa',
-  separatorFinishedColor: '#fe7013',
+  separatorFinishedColor: '#aaaaaa',
   separatorUnFinishedColor: '#aaaaaa',
-  stepIndicatorFinishedColor: '#fe7013',
+  stepIndicatorFinishedColor: '#aaaaaa',
   stepIndicatorUnFinishedColor: '#ffffff',
   stepIndicatorCurrentColor: '#ffffff',
   stepIndicatorLabelFontSize: 13,
@@ -57,8 +58,9 @@ export default class Proves extends React.Component{
     this.goToMenu = this.goToMenu.bind(this)
     this.handleSelect = this.handleSelect.bind(this)
     this.handleChange = this.handleChange.bind(this)
+    this.finishTest = this.finishTest.bind(this)
   }
-  
+
 
   state= {
     page:4,
@@ -66,6 +68,7 @@ export default class Proves extends React.Component{
     total: new Array(20).fill(0),
     tecnica: new Array(20).fill(0),
     control:new Array(20).fill(0),
+    value:new Array(20).fill(0),
     finish: false,
   }  
 
@@ -76,14 +79,13 @@ export default class Proves extends React.Component{
   goToMenu(){
     this.setState({page:0})
   }
-  onPageChange(position){
+  onPageChange= position =>{
     this.setState({currentPosition: position})
   }
 
   handleChange(event, i ) {
         
-    const target = event.target;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const value = event;
     //console.warn(value);
 
     var arrayTecnica = this.state.tecnica;
@@ -94,7 +96,7 @@ export default class Proves extends React.Component{
     arrayTotal2[i] = this.suma(this.state.tecnica[i], this.state.control[i]);
     this.setState({total: arrayTotal2 })
 
-    console.warn("tecnica:", this.state.tecnica);
+    //console.warn("tecnica:", this.state.tecnica);
     //console.warn("total:" , this.state.total);
     return true;
   }
@@ -102,7 +104,7 @@ export default class Proves extends React.Component{
   handleSelect(event, i) {
     //console.warn(event);
     var arrayControl = this.state.control;
-    arrayControl[i] = event.value;
+    arrayControl[i] = event;
 
     this.setState({ control: arrayControl });
 
@@ -111,8 +113,12 @@ export default class Proves extends React.Component{
     this.setState({total: arrayTotal1 })
 
 
-    console.warn("control:", this.state.control);
+    //console.warn("control:", this.state.control);
     return true;
+  }
+
+  finishTest(){
+    this.setState({finish: true});
   }
 
   render(){
@@ -121,8 +127,8 @@ export default class Proves extends React.Component{
         {this.state.page === 4 &&
         <ScrollView  >
           <View>         
-              <TouchableOpacity>
-                <Button title="Torna" onPress={this.goToMenu}></Button>
+              <TouchableOpacity onPress={this.goToMenu}>
+                <Icon style={{marginLeft:10, marginTop:10}} size={35} color='#22e96b' name="arrowleft" ></Icon>
               </TouchableOpacity>
             </View>
 
@@ -172,31 +178,31 @@ export default class Proves extends React.Component{
 
               <View style={{flexDirection:'column'}}>
                 <View style={styles.box3}>
-                  <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChange= {(e) => this.handleChange(e, 0)} value={this.state.tecnica[0]} ></TextInput>
+                  <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChangeText= {(e) => this.handleChange(e, 0)} value={this.state.tecnica[0]} defaultValue={this.state.tecnica[0]>0?this.state.tecnica[0]:''} ></TextInput>
                 </View>
                 <View style={styles.box3l}>
-                <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChange= {(e) => this.handleChange(e, 1)} value={this.state.tecnica[1]}></TextInput>
+                <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChangeText= {(e) => this.handleChange(e, 1)} value={this.state.tecnica[1]}></TextInput>
                 </View>
                 <View style={styles.box3}>
-                <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChange= {(e) => this.handleChange(e, 2)} value={this.state.tecnica[2]}></TextInput>
+                <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChangeText= {(e) => this.handleChange(e, 2)} value={this.state.tecnica[2]}></TextInput>
                 </View>
                 <View style={styles.box3l}>
-                <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChange= {(e) => this.handleChange(e, 3)} value={this.state.tecnica[3]}></TextInput>
+                <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChangeText= {(e) => this.handleChange(e, 3)} value={this.state.tecnica[3]}></TextInput>
                 </View>
               </View>
 
               <View style={{flexDirection:'column'}}>
                 <View style={styles.box3}>
-                  <NumericInput type='plus-minus' totalHeight={30} maxValue={4} minValue={0}></NumericInput>
+                  <NumericInput value={this.state.value[0]} type='plus-minus' totalHeight={30} maxValue={4} minValue={0} onChange={ (e)=>this.handleSelect(e, 0) }></NumericInput>
                 </View>
                 <View style={styles.box3l}>
-                  <NumericInput type='plus-minus'totalHeight={30} maxValue={4} minValue={0}></NumericInput>
+                  <NumericInput type='plus-minus'totalHeight={30} maxValue={4} minValue={0} onChange={ (e)=>this.handleSelect(e, 1) }></NumericInput>
                 </View>
                 <View style={styles.box3}>
-                  <NumericInput type='plus-minus' totalHeight={30} maxValue={4} minValue={0}></NumericInput>
+                  <NumericInput type='plus-minus' totalHeight={30} maxValue={4} minValue={0} onChange={ (e)=>this.handleSelect(e, 2) }></NumericInput>
                 </View>
                 <View style={styles.box3l}>
-                  <NumericInput type='plus-minus' totalHeight={30} maxValue={4} minValue={0}></NumericInput>
+                  <NumericInput type='plus-minus' totalHeight={30} maxValue={4} minValue={0} onChange={ (e)=>this.handleSelect(e, 3) }></NumericInput>
                 </View>
               </View>
 
@@ -247,16 +253,16 @@ export default class Proves extends React.Component{
 
               <View style={{flexDirection:'column'}}>
                 <View style={styles.box3}>
-                  <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChange= {(e) => this.handleChange(e, 4)} value={this.state.tecnica[4]}></TextInput>
+                  <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChangeText= {(e) => this.handleChange(e, 4)} value={this.state.tecnica[4]}></TextInput>
                 </View>
                 <View style={styles.box3l}>
-                <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChange= {(e) => this.handleChange(e, 5)} value={this.state.tecnica[5]}></TextInput>
+                <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChangeText= {(e) => this.handleChange(e, 5)} value={this.state.tecnica[5]}></TextInput>
                 </View>
                 <View style={styles.box3}>
-                <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChange= {(e) => this.handleChange(e, 6)} value={this.state.tecnica[6]}></TextInput>
+                <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChangeText= {(e) => this.handleChange(e, 6)} value={this.state.tecnica[6]}></TextInput>
                 </View>
                 <View style={styles.box3l}>
-                <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChange= {(e) => this.handleChange(e, 7)} value={this.state.tecnica[7]}></TextInput>
+                <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChangeText= {(e) => this.handleChange(e, 7)} value={this.state.tecnica[7]}></TextInput>
                 </View>
               </View>
 
@@ -335,16 +341,16 @@ export default class Proves extends React.Component{
 
               <View style={{flexDirection:'column'}}>
                 <View style={styles.box3}>
-                  <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChange= {(e) => this.handleChange(e, 8)} value={this.state.tecnica[8]}></TextInput>
+                  <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChangeText= {(e) => this.handleChange(e, 8)} value={this.state.tecnica[8]}></TextInput>
                 </View>
                 <View style={styles.box3l}>
-                <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChange= {(e) => this.handleChange(e, 9)} value={this.state.tecnica[9]}></TextInput>
+                <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChangeText= {(e) => this.handleChange(e, 9)} value={this.state.tecnica[9]}></TextInput>
                 </View>
                 <View style={styles.box3}>
-                <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChange= {(e) => this.handleChange(e, 10)} value={this.state.tecnica[10]}></TextInput>
+                <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChangeText= {(e) => this.handleChange(e, 10)} value={this.state.tecnica[10]}></TextInput>
                 </View>
                 <View style={styles.box3l}>
-                <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChange= {(e) => this.handleChange(e, 11)} value={this.state.tecnica[11]}></TextInput>
+                <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChangeText= {(e) => this.handleChange(e, 11)} value={this.state.tecnica[11]}></TextInput>
                 </View>
               </View>
 
@@ -410,16 +416,16 @@ export default class Proves extends React.Component{
 
               <View style={{flexDirection:'column'}}>
                 <View style={styles.box3}>
-                  <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChange= {(e) => this.handleChange(e, 12)} value={this.state.tecnica[12]}></TextInput>
+                  <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChangeText= {(e) => this.handleChange(e, 12)} value={this.state.tecnica[12]}></TextInput>
                 </View>
                 <View style={styles.box3l}>
-                <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChange= {(e) => this.handleChange(e, 13)} value={this.state.tecnica[13]}></TextInput>
+                <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChangeText= {(e) => this.handleChange(e, 13)} value={this.state.tecnica[13]}></TextInput>
                 </View>
                 <View style={styles.box3}>
-                <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChange= {(e) => this.handleChange(e, 14)} value={this.state.tecnica[14]}></TextInput>
+                <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChangeText= {(e) => this.handleChange(e, 14)} value={this.state.tecnica[14]}></TextInput>
                 </View>
                 <View style={styles.box3l}>
-                <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChange= {(e) => this.handleChange(e, 15)} value={this.state.tecnica[15]}></TextInput>
+                <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChangeText= {(e) => this.handleChange(e, 15)} value={this.state.tecnica[15]}></TextInput>
                 </View>
               </View>
 
@@ -440,16 +446,16 @@ export default class Proves extends React.Component{
 
               <View style={{flexDirection:'column'}}>
                 <View style={styles.box3}>
+                  <Text>{this.state.total[12]}</Text>
+                </View>
+                <View style={styles.box3l}>
                   <Text>{this.state.total[13]}</Text>
                 </View>
-                <View style={styles.box3l}>
+                <View style={styles.box3}>
                   <Text>{this.state.total[14]}</Text>
                 </View>
-                <View style={styles.box3}>
-                  <Text>{this.state.total[15]}</Text>
-                </View>
                 <View style={styles.box3l}>
-                  <Text>{this.state.total[16]}</Text>
+                  <Text>{this.state.total[15]}</Text>
                 </View>
               </View>
             </View>
@@ -497,16 +503,16 @@ export default class Proves extends React.Component{
 
               <View style={{flexDirection:'column'}}>
                 <View style={styles.box3}>
-                  <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChange= {(e) => this.handleChange(e, 16)} value={this.state.tecnica[16]}></TextInput>
+                  <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChangeText= {(e) => this.handleChange(e, 16)} value={this.state.tecnica[16]}></TextInput>
                 </View>
                 <View style={styles.box3l}>
-                <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChange= {(e) => this.handleChange(e, 17)} value={this.state.tecnica[17]}></TextInput>
+                <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChangeText= {(e) => this.handleChange(e, 17)} value={this.state.tecnica[17]}></TextInput>
                 </View>
                 <View style={styles.box3}>
-                <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChange= {(e) => this.handleChange(e, 18)} value={this.state.tecnica[18]}></TextInput>
+                <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChangeText= {(e) => this.handleChange(e, 18)} value={this.state.tecnica[18]}></TextInput>
                 </View>
                 <View style={styles.box3l}>
-                <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChange= {(e) => this.handleChange(e, 19)} value={this.state.tecnica[19]}></TextInput>
+                <TextInput style={styles.input} keyboardType='numeric' maxLength={10} onChangeText= {(e) => this.handleChange(e, 19)} value={this.state.tecnica[19]}></TextInput>
                 </View>
               </View>
 
@@ -527,20 +533,29 @@ export default class Proves extends React.Component{
 
               <View style={{flexDirection:'column'}}>
                 <View style={styles.box3}>
+                  <Text>{this.state.total[16]}</Text>
+                </View>
+                <View style={styles.box3l}>
                   <Text>{this.state.total[17]}</Text>
                 </View>
-                <View style={styles.box3l}>
+                <View style={styles.box3}>
                   <Text>{this.state.total[18]}</Text>
                 </View>
-                <View style={styles.box3}>
-                  <Text>{this.state.total[19]}</Text>
-                </View>
                 <View style={styles.box3l}>
-                  <Text>{this.state.total[20]}</Text>
+                  <Text>{this.state.total[19]}</Text>
                 </View>
               </View>
             </View>
             
+
+            <Button style={styles.green_btn} onPress={this.finishTest}  ><Text style={{color:'white', fontSize:20, fontWeight:'bold'}}>Finalitza</Text></Button>
+            {this.state.finish === true && this.state.total.reduce(function(a,b) {return a+b;}) >= 120 &&
+              <Text style={styles.succes_msg}><B>ENHORABONA!</B> Prova de nivell superada.</Text>
+            }
+
+            {this.state.finish === true && this.state.total.reduce(function(a,b) {return a+b;}) < 120 &&
+              <Text style={styles.fail_msg} > Prova de nivell <B>NO</B> superada. Treballa els cops febles i torna-ho a intentar. </Text>
+            }
           </View>
           }
 
@@ -560,6 +575,8 @@ export default class Proves extends React.Component{
               customStyles={customStyles}
               currentPosition={this.state.currentPosition}
               labels={labels}
+              onPress={this.onPageChange}
+              
                />
           </View>
         </ScrollView>
@@ -672,6 +689,30 @@ const styles = StyleSheet.create({
     paddingRight: 12,
     textAlign: 'right',
   },
+  green_btn:{
+    marginTop: 30,
+    backgroundColor: '#22e96b',
+    borderRadius: 8,
+    padding:6,
+    fontSize: 14,
+    width: Dimensions.get('window').width /2 -60,
+    alignSelf:'center',
+    borderWidth:0,
+    },
+    succes_msg:{
+      color: '#270',
+      backgroundColor: '#DFF2BF',
+      margin: 10,
+      padding: 10,
+      borderRadius: 3,
+    },
+    fail_msg:{
+      color: '#D8000C',
+      backgroundColor: '#FFBABA',
+      margin: 10 ,
+      padding: 10,
+      borderRadius: 3,
+    }
 });
 
 

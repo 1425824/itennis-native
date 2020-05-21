@@ -24,6 +24,7 @@ import axios from 'axios';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import RNFetchBlob from 'rn-fetch-blob';
 import Button from 'apsl-react-native-button';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 export default class Proves extends React.Component{
 
@@ -137,8 +138,8 @@ export default class Proves extends React.Component{
         {this.state.page === 2 &&
         <ScrollView style={{flexDirection:'column'}} >
           <View>         
-              <TouchableOpacity>
-                <Button onPress={this.goToMenu}><Text>Torna</Text></Button>
+              <TouchableOpacity onPress={this.goToMenu}>
+                <Icon style={{marginLeft:10, marginTop:10}} size={35} color='#22e96b' name="arrowleft" ></Icon>
               </TouchableOpacity>
               
             </View>
